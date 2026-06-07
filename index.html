@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcopolo São Mateus - Consulta de Peças</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <rect width="40" height="40" rx="6" fill="#003C78"/>
+                        <path d="M8 20h24M20 8v24M12 12l16 16M28 12L12 28" stroke="#F47920" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>MARCOPOLO</h1>
+                    <span>VEÍCULOS SÃO MATEUS - CONSULTA DE PEÇAS</span>
+                </div>
+            </div>
+            <div class="search-area">
+                <input type="text" id="searchInput" placeholder="Buscar por código ou nome da peça..." autocomplete="off">
+            </div>
+        </div>
+    </header>
+
+    <nav class="breadcrumb" id="breadcrumb">
+        <a href="#" onclick="navegarPara('home')">INÍCIO</a>
+    </nav>
+
+    <main class="main-content" id="mainContent">
+        <div class="loading-inicial">Carregando peças...</div>
+    </main>
+
+    <div class="modal" id="modal" onclick="if(event.target===this)fecharModal()">
+        <div class="modal-content">
+            <button class="modal-close" onclick="fecharModal()">&times;</button>
+            <img id="modalImage" src="" alt="">
+            <div class="modal-info">
+                <h2 id="modalNome"></h2>
+                <p id="modalCodigo"></p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>MARCOPOLO S.A. - Unidade Veículos São Mateus</p>
+        <p class="footer-sub">Sistema de Consulta de Peças - Uso Interno</p>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

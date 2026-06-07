@@ -1,0 +1,56 @@
+/* =============================================
+   ADICIONE ESTE TRECHO NO SEU style.css
+   (substitua o bloco .search-result-item existente)
+   ============================================= */
+
+.search-result-item {
+    padding: 10px 14px;
+    border-bottom: 1px solid #EEE;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.search-result-item:hover {
+    background: #FFF3E8;
+}
+
+.result-thumb {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #EEE;
+    background: #F9F9F9;
+}
+
+.result-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.result-info {
+    flex: 1;
+}
+
+.search-result-item .result-nome {
+    font-weight: 600;
+    color: #003C78;
+    font-size: 0.9rem;
+}
+
+.search-result-item .result-caminho {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 2px;
+}
+
+.search-result-item .result-codigo {
+    font-size: 0.8rem;
+    color: #F47920;
+    font-weight: 500;
+}

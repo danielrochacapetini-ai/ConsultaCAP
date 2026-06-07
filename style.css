@@ -1,0 +1,564 @@
+/* ============================================
+   MARCOPOLO SÃO MATEUS - CONSULTA DE PEÇAS
+   Cores: Azul #003C78, Laranja #F47920, 
+          Preto #1A1A1A, Branco #FFFFFF
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #F5F5F5;
+    color: #1A1A1A;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+.header {
+    background: linear-gradient(135deg, #003C78 0%, #002952 100%);
+    padding: 16px 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon svg {
+    width: 44px;
+    height: 44px;
+}
+
+.logo-text h1 {
+    color: #FFFFFF;
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.logo-text span {
+    color: #F47920;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+/* SEARCH */
+.search-area {
+    position: relative;
+    flex: 1;
+    max-width: 450px;
+    min-width: 250px;
+}
+
+.search-area input {
+    width: 100%;
+    padding: 12px 18px;
+    border: 2px solid #F47920;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: #FFFFFF;
+    color: #1A1A1A;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.search-area input:focus {
+    border-color: #F47920;
+    box-shadow: 0 0 0 3px rgba(244, 121, 32, 0.2);
+}
+
+.search-area input::placeholder {
+    color: #999;
+}
+
+/* BREADCRUMB */
+.breadcrumb {
+    background: #FFFFFF;
+    padding: 12px 24px;
+    border-bottom: 2px solid #F47920;
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.breadcrumb a {
+    color: #003C78;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.breadcrumb a:hover {
+    color: #F47920;
+}
+
+.breadcrumb span {
+    color: #999;
+    margin: 0 8px;
+    font-size: 0.8rem;
+}
+
+.breadcrumb .breadcrumb-atual {
+    color: #F47920;
+    font-weight: 600;
+}
+
+/* MAIN CONTENT */
+.main-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    flex: 1;
+    width: 100%;
+}
+
+/* GRID DE CARDS (MODELOS E CATEGORIAS) */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    border-color: #F47920;
+    box-shadow: 0 8px 24px rgba(244, 121, 32, 0.15);
+}
+
+.card-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 16px;
+    background: linear-gradient(135deg, #003C78, #005AA7);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-icon svg {
+    width: 28px;
+    height: 28px;
+    fill: #FFFFFF;
+}
+
+.card-icon.categoria-icon {
+    background: linear-gradient(135deg, #F47920, #FF9A4D);
+}
+
+.card h3 {
+    color: #003C78;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.card p {
+    color: #666;
+    font-size: 0.8rem;
+    margin-top: 6px;
+}
+
+/* GRID DE PEÇAS */
+.pecas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.peca-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.peca-card:hover {
+    transform: translateY(-4px);
+    border-color: #F47920;
+    box-shadow: 0 8px 24px rgba(244, 121, 32, 0.15);
+}
+
+.peca-card .peca-imagem {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    background: #F9F9F9;
+    padding: 12px;
+    border-bottom: 2px solid #F0F0F0;
+}
+
+.peca-card .peca-info {
+    padding: 16px 20px;
+}
+
+.peca-card .peca-nome {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #003C78;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.peca-card .peca-codigo {
+    font-size: 0.85rem;
+    color: #F47920;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+/* ============================================
+   RESULTADOS DE BUSCA EM TEMPO REAL
+   ============================================ */
+
+.busca-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #E0E0E0;
+}
+
+.busca-titulo {
+    color: #003C78;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.busca-contagem {
+    color: #666;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+.busca-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.busca-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.busca-item:hover {
+    border-color: #F47920;
+    box-shadow: 0 4px 16px rgba(244, 121, 32, 0.15);
+    transform: translateX(4px);
+}
+
+.busca-item-thumb {
+    width: 70px;
+    height: 70px;
+    min-width: 70px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #EEE;
+    background: #F9F9F9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.busca-item-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 4px;
+}
+
+.busca-item-info {
+    flex: 1;
+}
+
+.busca-item-nome {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #003C78;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.busca-item-codigo {
+    font-size: 0.85rem;
+    color: #F47920;
+    font-weight: 600;
+    margin-top: 3px;
+}
+
+.busca-item-caminho {
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 3px;
+}
+
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: #FFFFFF;
+    border-radius: 16px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: auto;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: #003C78;
+    color: #FFFFFF;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+    z-index: 10;
+}
+
+.modal-close:hover {
+    background: #F47920;
+}
+
+.modal-content img {
+    width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+    background: #F9F9F9;
+    padding: 20px;
+}
+
+.modal-info {
+    padding: 24px 32px;
+    text-align: center;
+    border-top: 3px solid #F47920;
+}
+
+.modal-info h2 {
+    color: #003C78;
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.modal-info p {
+    color: #F47920;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+/* FOOTER */
+.footer {
+    background: #1A1A1A;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 20px 24px;
+    margin-top: auto;
+}
+
+.footer p {
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+.footer .footer-sub {
+    color: #F47920;
+    font-size: 0.75rem;
+    margin-top: 4px;
+}
+
+/* EMPTY STATE */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+
+.empty-state svg {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 16px;
+    opacity: 0.4;
+}
+
+.empty-state h3 {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.empty-state p {
+    font-size: 0.9rem;
+}
+
+/* LOADING */
+.loading-inicial {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.loading-inicial p {
+    margin-top: 16px;
+    font-size: 0.9rem;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #E0E0E0;
+    border-top-color: #F47920;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .logo-area {
+        justify-content: center;
+    }
+
+    .search-area {
+        max-width: 100%;
+    }
+
+    .logo-text h1 {
+        font-size: 1.2rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+    }
+
+    .pecas-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: 20px 14px;
+    }
+
+    .modal-content {
+        border-radius: 8px;
+    }
+
+    .modal-info h2 {
+        font-size: 1.2rem;
+    }
+
+    .busca-item-thumb {
+        width: 55px;
+        height: 55px;
+        min-width: 55px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .card h3 {
+        font-size: 0.8rem;
+    }
+
+    .busca-item {
+        gap: 10px;
+        padding: 10px 12px;
+    }
+
+    .busca-item-thumb {
+        width: 45px;
+        height: 45px;
+        min-width: 45px;
+    }
+
+    .busca-item-nome {
+        font-size: 0.85rem;
+    }
+}

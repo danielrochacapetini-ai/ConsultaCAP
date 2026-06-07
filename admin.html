@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Cadastro de Peças</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <rect width="40" height="40" rx="8" fill="#F47920"/>
+                        <path d="M10 28V12h4l3 10 3-10h4v16h-3V17l-3 11h-2l-3-11v11h-3z" fill="white"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>ADMIN</h1>
+                    <span>CADASTRO DE PEÇAS</span>
+                </div>
+            </div>
+            <a href="index.html" class="btn-voltar">← VOLTAR AO SITE</a>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="admin-container">
+            <div class="form-section">
+                <h2>CADASTRAR NOVA PEÇA</h2>
+                <form id="formPeca">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modelo">MODELO DO VEÍCULO</label>
+                            <select id="modelo" required>
+                                <option value="">Selecione o modelo...</option>
+                                <option value="VOLARE_MV9L">VOLARE MV9L</option>
+                                <option value="VOLARE_V9L">VOLARE V9L</option>
+                                <option value="VOLARE_W9C">VOLARE W9C</option>
+                                <option value="VOLARE_MV8L">VOLARE MV8L</option>
+                                <option value="VOLARE_V8L">VOLARE V8L</option>
+                                <option value="VOLARE_WL">VOLARE WL</option>
+                                <option value="VOLARE_V10L">VOLARE V10L</option>
+                                <option value="VOLARE_W12">VOLARE W12</option>
+                                <option value="MDS">MDS</option>
+                                <option value="ORE_1">ORE 1</option>
+                                <option value="ONUREA">ONUREA</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="categoria">CATEGORIA</label>
+                            <select id="categoria" required>
+                                <option value="">Selecione a categoria...</option>
+                                <option value="FABRICADOS">FABRICADOS</option>
+                                <option value="PLASTICOS">PLÁSTICOS</option>
+                                <option value="PERFIS">PERFIS</option>
+                                <option value="ILUMINACAO">ILUMINAÇÃO</option>
+                                <option value="ADESIVOS">ADESIVOS</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nomePeca">NOME DA PEÇA</label>
+                            <input type="text" id="nomePeca" placeholder="Ex: CADEIRANTE" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="codigoPeca">CÓDIGO DA PEÇA</label>
+                            <input type="text" id="codigoPeca" placeholder="Ex: MP-ADV-001" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="imagemPeca">IMAGEM DA PEÇA</label>
+                        <div class="upload-area" id="uploadArea">
+                            <input type="file" id="imagemPeca" accept="image/*" required>
+                            <div class="upload-placeholder" id="uploadPlaceholder">
+                                <svg viewBox="0 0 24 24" fill="#999"><path d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h3V2h2v3h3v2h-3zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8h-3zM5 19l3-4 2 3 3-4 4 5H5z"/></svg>
+                                <p>Clique ou arraste a imagem aqui</p>
+                                <span>JPG, PNG (máx. 5MB)</span>
+                            </div>
+                            <img id="previewImagem" class="preview-img" style="display:none;">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-cadastrar" id="btnCadastrar">
+                        <span id="btnTexto">CADASTRAR PEÇA</span>
+                        <div id="btnLoading" class="loading" style="display:none;"></div>
+                    </button>
+                </form>
+                <div id="mensagem" class="mensagem" style="display:none;"></div>
+            </div>
+
+            <div class="lista-section">
+                <h2>PEÇAS CADASTRADAS</h2>
+                <div class="filtros">
+                    <select id="filtroModelo">
+                        <option value="">Todos os modelos</option>
+                        <option value="VOLARE_MV9L">VOLARE MV9L</option>
+                        <option value="VOLARE_V9L">VOLARE V9L</option>
+                        <option value="VOLARE_W9C">VOLARE W9C</option>
+                        <option value="VOLARE_MV8L">VOLARE MV8L</option>
+                        <option value="VOLARE_V8L">VOLARE V8L</option>
+                        <option value="VOLARE_WL">VOLARE WL</option>
+                        <option value="VOLARE_V10L">VOLARE V10L</option>
+                        <option value="VOLARE_W12">VOLARE W12</option>
+                        <option value="MDS">MDS</option>
+                        <option value="ORE_1">ORE 1</option>
+                        <option value="ONUREA">ONUREA</option>
+                    </select>
+                    <select id="filtroCategoria">
+                        <option value="">Todas as categorias</option>
+                        <option value="FABRICADOS">FABRICADOS</option>
+                        <option value="PLASTICOS">PLÁSTICOS</option>
+                        <option value="PERFIS">PERFIS</option>
+                        <option value="ILUMINACAO">ILUMINAÇÃO</option>
+                        <option value="ADESIVOS">ADESIVOS</option>
+                    </select>
+                </div>
+                <div id="listaPecas" class="lista-pecas">
+                    <div class="loading-lista">Carregando peças...</div>
+                </div>
+                <div id="contagem" class="contagem"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

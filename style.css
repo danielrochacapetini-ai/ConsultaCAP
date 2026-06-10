@@ -94,29 +94,33 @@ body {
 }
 
 /* NAV LINKS */
+/* NAV LINKS */
 .nav-links {
     display: flex;
     gap: 8px;
 }
 
-.nav-btn {
-    color: #FFFFFF;
-    text-decoration: none;
+.nav-links .nav-btn {
+    color: #FFFFFF !important;
+    text-decoration: none !important;
     padding: 8px 16px;
     border-radius: 6px;
     font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.5px;
     transition: all 0.3s;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.15);
+    white-space: nowrap;
 }
 
-.nav-btn:hover {
-    background: rgba(255,255,255,0.2);
+.nav-links .nav-btn:hover {
+    background: rgba(255,255,255,0.25);
+    text-decoration: none !important;
 }
 
-.nav-btn.active {
+.nav-links .nav-btn.active {
     background: #F47920;
+    color: #FFFFFF !important;
 }
 
 /* BREADCRUMB */

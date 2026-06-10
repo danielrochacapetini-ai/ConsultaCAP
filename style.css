@@ -93,6 +93,32 @@ body {
     color: #999;
 }
 
+/* NAV LINKS */
+.nav-links {
+    display: flex;
+    gap: 8px;
+}
+
+.nav-btn {
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+    background: rgba(255,255,255,0.1);
+}
+
+.nav-btn:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.nav-btn.active {
+    background: #F47920;
+}
+
 /* BREADCRUMB */
 .breadcrumb {
     background: #FFFFFF;

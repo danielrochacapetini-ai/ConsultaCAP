@@ -1,4 +1,4 @@
-var registros = [];
+    var registros = [];
 var registrosFiltrados = [];
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -25,9 +25,12 @@ function registrarItem() {
     var numeroCarro = document.getElementById('numeroCarro').value.trim();
     var modelo = document.getElementById('modelo').value;
     var quantidade = document.getElementById('quantidade').value;
-    var tipo = document.getElementById('tipo').value; // ✅ NOVO
+    var tipo = document.getElementById('tipo').value;
     var motivo = document.getElementById('motivo').value;
     var status = document.getElementById('status').value;
+
+    // Log para depuração: verificar os valores dos campos
+    console.log('Valores dos campos:', { codigo, descricao, prefixo, numeroCarro, modelo, quantidade, tipo, motivo, status });
 
     if (!codigo || !descricao || !numeroCarro || !modelo || !quantidade || !tipo || !motivo || !status) {
         mostrarMensagem('Preencha todos os campos.', 'erro');
@@ -40,16 +43,23 @@ function registrarItem() {
         numeroCarro: prefixo + '-' + numeroCarro,
         modelo: modelo,
         quantidade: parseInt(quantidade),
-        tipo: tipo, // ✅ NOVO
+        tipo: tipo,
         motivo: motivo,
         status: status,
         criadoEm: firebase.firestore.FieldValue.serverTimestamp()
     };
 
+    // Log para depuração: verificar os dados a serem salvos
+    console.log('Dados a serem salvos:', dados);
+
     db.collection('controle').add(dados).then(function() {
         mostrarMensagem('Registro salvo com sucesso!', 'sucesso');
         document.getElementById('formControle').reset();
         carregarRegistros();
+    }).catch(function(error) {
+        // Log para depuração: capturar e exibir erros do Firebase
+        console.error('Erro ao salvar registro no Firebase:', error);
+        mostrarMensagem('Erro ao salvar registro: ' + error.message, 'erro');
     });
 }
 
@@ -112,7 +122,7 @@ function exportarExcel() {
         CARRO: r.numeroCarro,
         MODELO: r.modelo,
         QUANTIDADE: r.quantidade,
-        TIPO: r.tipo || '', // ✅ NOVO
+        TIPO: r.tipo || '',
         MOTIVO: r.motivo,
         STATUS: r.status
     }));
@@ -131,7 +141,7 @@ function exportarPDF() {
         r.numeroCarro,
         r.modelo,
         r.quantidade,
-        r.tipo || '', // ✅ NOVO
+        r.tipo || '',
         r.motivo,
         r.status
     ]);

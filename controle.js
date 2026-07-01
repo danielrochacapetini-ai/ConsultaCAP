@@ -194,6 +194,7 @@ function abrirEdicao(id) {
     modalHtml += '<div class="form-group"><label>NÚMERO DO CARRO</label><div class="prefixo-group"><select id="editPrefixo" class="prefixo-select"><option value="VV0052"' + (prefixoEdit === 'VV0052' ? ' selected' : '') + '>VV0052</option><option value="VV0053"' + (prefixoEdit === 'VV0053' ? ' selected' : '') + '>VV0053</option></select><input type="text" id="editNumeroCarro" value="' + numEdit + '"></div></div>';
     modalHtml += '<div class="form-group"><label>MODELO</label><select id="editModelo">';
     modalHtml += '<option value="AMEC"' + (registro.modelo === 'AMEC' ? ' selected' : '') + '>AMEC</option>';
+    modalHtml += '<option value="TORINO"' + (registro.modelo === 'TORINO' ? ' selected' : '') + '>TORINO</option>';
     modalHtml += '<option value="VOLARE_MV9L"' + (registro.modelo === 'VOLARE_MV9L' ? ' selected' : '') + '>VOLARE MV9L</option>';
     modalHtml += '<option value="VOLARE_V9L"' + (registro.modelo === 'VOLARE_V9L' ? ' selected' : '') + '>VOLARE V9L</option>';
     modalHtml += '<option value="VOLARE_W9C"' + (registro.modelo === 'VOLARE_W9C' ? ' selected' : '') + '>VOLARE W9C</option>';

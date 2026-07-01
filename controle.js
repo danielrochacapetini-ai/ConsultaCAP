@@ -209,6 +209,7 @@ function abrirEdicao(id) {
     modalHtml += '<option value="SUCATA"' + (registro.motivo === 'SUCATA' ? ' selected' : '') + '>SUCATA</option>';
     modalHtml += '<option value="ERRO DE ESTOQUE"' + (registro.motivo === 'ERRO DE ESTOQUE' ? ' selected' : '') + '>ERRO DE ESTOQUE</option>';
     modalHtml += '<option value="DIVERGÊNCIA DE ESTOQUE"' + (registro.motivo === 'DIVERGÊNCIA DE ESTOQUE' ? ' selected' : '') + '>DIVERGÊNCIA DE ESTOQUE</option>';
+    modalHtml += '<option value="PREVENTIVO"' + (registro.motivo === 'PREVENTIVO' ? ' selected' : '') + '>PREVENTIVO</option>';
     modalHtml += '</select></div>';
     modalHtml += '<div class="form-group"><label>STATUS</label><select id="editStatus">';
     var statusOpcoes = ['ESTOQUE ZERADO','FATURADO','COMPRADO','ESTORNADO','SUCATEADO','EMBARCADO','CARREGAMENTO','DESCARREGAMENTO','PENDENTE','ANDAMENTO','RESOLVIDO','ENTREGUE'];

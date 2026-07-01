@@ -1,4 +1,4 @@
-    var registros = [];
+var registros = [];
 var registrosFiltrados = [];
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -11,6 +11,17 @@ function toggleForm() {
     document.getElementById('formControle').classList.toggle('hidden');
 }
 
+function mostrarMensagem(texto, tipo) {
+    var mensagemDiv = document.getElementById('mensagem');
+    mensagemDiv.textContent = texto;
+    mensagemDiv.className = 'mensagem ' + tipo;
+    mensagemDiv.style.display = 'block';
+
+    setTimeout(function() {
+        mensagemDiv.style.display = 'none';
+    }, 3000);
+}
+
 function configurarFormulario() {
     document.getElementById('formControle').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -19,6 +30,14 @@ function configurarFormulario() {
 }
 
 function registrarItem() {
+    var btnRegistrar = document.getElementById('btnRegistrar');
+    var btnTexto = document.getElementById('btnTexto');
+    var btnLoading = document.getElementById('btnLoading');
+
+    btnRegistrar.disabled = true;
+    btnTexto.style.display = 'none';
+    btnLoading.style.display = 'block';
+
     var codigo = document.getElementById('codigo').value.trim().toUpperCase();
     var descricao = document.getElementById('descricao').value.trim().toUpperCase();
     var prefixo = document.getElementById('prefixo').value;
@@ -29,11 +48,11 @@ function registrarItem() {
     var motivo = document.getElementById('motivo').value;
     var status = document.getElementById('status').value;
 
-    // Log para depuração: verificar os valores dos campos
-    console.log('Valores dos campos:', { codigo, descricao, prefixo, numeroCarro, modelo, quantidade, tipo, motivo, status });
-
     if (!codigo || !descricao || !numeroCarro || !modelo || !quantidade || !tipo || !motivo || !status) {
         mostrarMensagem('Preencha todos os campos.', 'erro');
+        btnRegistrar.disabled = false;
+        btnTexto.style.display = 'block';
+        btnLoading.style.display = 'none';
         return;
     }
 
@@ -49,21 +68,24 @@ function registrarItem() {
         criadoEm: firebase.firestore.FieldValue.serverTimestamp()
     };
 
-    // Log para depuração: verificar os dados a serem salvos
-    console.log('Dados a serem salvos:', dados);
-
     db.collection('controle').add(dados).then(function() {
         mostrarMensagem('Registro salvo com sucesso!', 'sucesso');
         document.getElementById('formControle').reset();
         carregarRegistros();
     }).catch(function(error) {
-        // Log para depuração: capturar e exibir erros do Firebase
         console.error('Erro ao salvar registro no Firebase:', error);
         mostrarMensagem('Erro ao salvar registro: ' + error.message, 'erro');
+    }).finally(function() {
+        btnRegistrar.disabled = false;
+        btnTexto.style.display = 'block';
+        btnLoading.style.display = 'none';
     });
 }
 
 function carregarRegistros() {
+    var listaRegistrosDiv = document.getElementById('listaRegistros');
+    listaRegistrosDiv.innerHTML = '<div class="loading-lista">Carregando registros...</div>';
+
     db.collection('controle').orderBy('criadoEm', 'desc').get().then(function(snapshot) {
         registros = [];
         snapshot.forEach(function(doc) {
@@ -72,6 +94,9 @@ function carregarRegistros() {
             registros.push(data);
         });
         aplicarFiltros();
+    }).catch(function(error) {
+        console.error('Erro ao carregar registros:', error);
+        listaRegistrosDiv.innerHTML = '<div class="mensagem erro">Erro ao carregar registros.</div>';
     });
 }
 
@@ -97,6 +122,14 @@ function aplicarFiltros() {
 
 function renderizarLista() {
     var html = '';
+    var listaRegistrosDiv = document.getElementById('listaRegistros');
+    var contagemDiv = document.getElementById('contagem');
+
+    if (registrosFiltrados.length === 0) {
+        listaRegistrosDiv.innerHTML = '<div class="mensagem info">Nenhum registro encontrado.</div>';
+        contagemDiv.textContent = 'Total de registros: 0';
+        return;
+    }
 
     registrosFiltrados.forEach(function(r) {
         html += `
@@ -109,10 +142,12 @@ function renderizarLista() {
             <div><b>Tipo:</b> ${r.tipo || ''}</div>
             <div><b>Motivo:</b> ${r.motivo}</div>
             <div><b>Status:</b> ${r.status}</div>
+            <div><b>Criado em:</b> ${r.criadoEm ? new Date(r.criadoEm.toDate()).toLocaleString() : 'N/A'}</div>
         </div>`;
     });
 
-    document.getElementById('listaRegistros').innerHTML = html;
+    listaRegistrosDiv.innerHTML = html;
+    contagemDiv.textContent = `Total de registros: ${registrosFiltrados.length}`;
 }
 
 function exportarExcel() {
@@ -124,7 +159,8 @@ function exportarExcel() {
         QUANTIDADE: r.quantidade,
         TIPO: r.tipo || '',
         MOTIVO: r.motivo,
-        STATUS: r.status
+        STATUS: r.status,
+        CRIADO_EM: r.criadoEm ? new Date(r.criadoEm.toDate()).toLocaleString() : 'N/A'
     }));
 
     var ws = XLSX.utils.json_to_sheet(dados);
@@ -143,11 +179,12 @@ function exportarPDF() {
         r.quantidade,
         r.tipo || '',
         r.motivo,
-        r.status
+        r.status,
+        r.criadoEm ? new Date(r.criadoEm.toDate()).toLocaleString() : 'N/A'
     ]);
 
     doc.autoTable({
-        head: [['COD', 'DESC', 'CARRO', 'MODELO', 'QTD', 'TIPO', 'MOTIVO', 'STATUS']],
+        head: [['COD', 'DESC', 'CARRO', 'MODELO', 'QTD', 'TIPO', 'MOTIVO', 'STATUS', 'CRIADO EM']],
         body: linhas
     });
 

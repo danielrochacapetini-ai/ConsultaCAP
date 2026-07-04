@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle - Marcopolo São Mateus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="controle.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <rect width="40" height="40" rx="6" fill="#003C78"/>
+                        <path d="M8 20h24M20 8v24M12 12l16 16M28 12L12 28" stroke="#F47920" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>CONTROLE</h1>
+                    <span>GESTÃO DE ITENS - LOGÍSTICA</span>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-btn">INÍCIO</a>
+                <a href="controle.html" class="nav-btn active">CONTROLE</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="form-section">
+            <div class="form-header">
+                <h2>NOVO REGISTRO</h2>
+                <button class="btn-toggle-form" id="btnToggleForm" onclick="toggleForm()">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                </button>
+            </div>
+            <form id="formControle" class="form-controle">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="codigo">CÓDIGO</label>
+                        <input type="text" id="codigo" placeholder="Código do produto" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descricao">DESCRIÇÃO</label>
+                        <input type="text" id="descricao" placeholder="Nome da peça" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="numeroCarro">NÚMERO DO CARRO</label>
+                        <div class="prefixo-group">
+                            <select id="prefixo" class="prefixo-select">
+                                <option value="VV0052">VV0052</option>
+                                <option value="VV0053">VV0053</option>
+                            </select>
+                            <input type="text" id="numeroCarro" placeholder="Número" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modelo">MODELO</label>
+                        <select id="modelo" required>
+                            <option value="">Selecione...</option>
+                            <option value="TORINO">TORINO</option>
+                            <option value="AMEC">AMEC</option>
+                            <option value="VOLARE_MV9L">VOLARE MV9L</option>
+                            <option value="VOLARE_V9L">VOLARE V9L</option>
+                            <option value="VOLARE_W9C">VOLARE W9C</option>
+                            <option value="VOLARE_MV8L">VOLARE MV8L</option>
+                            <option value="VOLARE_V8L">VOLARE V8L</option>
+                            <option value="VOLARE_WL">VOLARE WL</option>
+                            <option value="VOLARE_V10L">VOLARE V10L</option>
+                            <option value="VOLARE_W12">VOLARE W12</option>
+                            <option value="THUNDER">THUNDER</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantidade">QUANTIDADE</label>
+                        <input type="number" id="quantidade" placeholder="Qtd" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo">TIPO</label>
+                        <select id="tipo" required>
+                            <option value="">Selecione...</option>
+                            <option value="FABRICADO">FABRICADO</option>
+                            <option value="COMPRADO">COMPRADO</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="motivo">MOTIVO</label>
+                        <select id="motivo" required>
+                            <option value="">Selecione...</option>
+                            <option value="SUCATA">SUCATA</option>
+                            <option value="ERRO DE ESTOQUE">ERRO DE ESTOQUE</option>
+                            <option value="DIVERGÊNCIA DE ESTOQUE">DIVERGÊNCIA DE ESTOQUE</option>
+                            <option value="PREVENTIVO">PREVENTIVO</option>
+                            <option value="ATRASO">ATRASO</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">STATUS</label>
+                        <select id="status" required>
+                            <option value="">Selecione...</option>
+                            <option value="ESTOQUE ZERADO">ESTOQUE ZERADO</option>
+                            <option value="FATURADO">FATURADO</option>
+                            <option value="COMPRADO">COMPRADO</option>
+                            <option value="ESTORNADO">ESTORNADO</option>
+                            <option value="SUCATEADO">SUCATEADO</option>
+                            <option value="EMBARCADO">EMBARCADO</option>
+                            <option value="CARREGAMENTO">CARREGAMENTO</option>
+                            <option value="DESCARREGAMENTO">DESCARREGAMENTO</option>
+                            <option value="PENDENTE">PENDENTE</option>
+                            <option value="ANDAMENTO">ANDAMENTO</option>
+                            <option value="RESOLVIDO">RESOLVIDO</option>
+                            <option value="ENTREGUE">ENTREGUE</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="atraso">ATRASO (DIAS)</label>
+                        <input type="number" id="atraso" placeholder="Opcional" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="transportador">TRANSPORTADOR</label>
+                        <input type="text" id="transportador" placeholder="Opcional">
+                    </div>
+                    <div class="form-group">
+                        <label for="notaFiscal">NOTA FISCAL</label>
+                        <input type="text" id="notaFiscal" placeholder="Opcional">
+                    </div>
+                </div>
+                <button type="submit" class="btn-registrar" id="btnRegistrar">
+                    <span id="btnTexto">REGISTRAR</span>
+                    <div id="btnLoading" class="loading-btn" style="display:none;"></div>
+                </button>
+            </form>
+            <div id="mensagem" class="mensagem" style="display:none;"></div>
+        </section>
+
+        <section class="lista-section">
+            <div class="lista-header">
+                <h2>REGISTROS</h2>
+                <div class="export-btns">
+                    <button class="btn-export btn-excel" onclick="exportarExcel()">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+                        EXCEL
+                    </button>
+                    <button class="btn-export btn-pdf" onclick="exportarPDF()">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+                        PDF
+                    </button>
+                </div>
+            </div>
+            <div class="filtros">
+                <input type="text" id="filtroBusca" placeholder="Buscar código ou descrição...">
+                <select id="filtroStatus">
+                    <option value="">Todos os status</option>
+                    <option value="ESTOQUE ZERADO">ESTOQUE ZERADO</option>
+                    <option value="FATURADO">FATURADO</option>
+                    <option value="COMPRADO">COMPRADO</option>
+                    <option value="ESTORNADO">ESTORNADO</option>
+                    <option value="SUCATEADO">SUCATEADO</option>
+                    <option value="EMBARCADO">EMBARCADO</option>
+                    <option value="CARREGAMENTO">CARREGAMENTO</option>
+                    <option value="DESCARREGAMENTO">DESCARREGAMENTO</option>
+                    <option value="PENDENTE">PENDENTE</option>
+                    <option value="ANDAMENTO">ANDAMENTO</option>
+                    <option value="RESOLVIDO">RESOLVIDO</option>
+                    <option value="ENTREGUE">ENTREGUE</option>
+                </select>
+                <select id="filtroModelo">
+                    <option value="">Todos os modelos</option>
+                    <option value="AMEC">AMEC</option>
+                    <option value="TORINO">TORINO</option>
+                    <option value="VOLARE_MV9L">VOLARE MV9L</option>
+                    <option value="VOLARE_V9L">VOLARE V9L</option>
+                    <option value="VOLARE_W9C">VOLARE W9C</option>
+                    <option value="VOLARE_MV8L">VOLARE MV8L</option>
+                    <option value="VOLARE_V8L">VOLARE V8L</option>
+                    <option value="VOLARE_WL">VOLARE WL</option>
+                    <option value="VOLARE_V10L">VOLARE V10L</option>
+                    <option value="VOLARE_W12">VOLARE W12</option>
+                    <option value="THUNDER">THUNDER</option>
+                </select>
+            </div>
+            <div id="listaRegistros" class="lista-registros">
+                <div class="loading-lista">Carregando registros...</div>
+            </div>
+            <div id="contagem" class="contagem"></div>
+        </section>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="controle.js?v=1.2"></script>
+</body>
+</html>

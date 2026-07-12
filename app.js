@@ -21,6 +21,7 @@ var CATEGORIAS = [
 ];
 
 var pecas = [];
+var pecas1700 = [];
 
 var estadoAtual = {
     tela: 'home',
@@ -37,20 +38,38 @@ function carregarPecasFirebase() {
     var main = document.getElementById('mainContent');
     main.innerHTML = '<div class="loading-inicial"><div class="loading-spinner"></div><p>Carregando peças...</p></div>';
 
+    // Carregar peças normais
     db.collection('pecas').get().then(function(snapshot) {
         pecas = [];
         snapshot.forEach(function(doc) {
             var data = doc.data();
-            pecas.push({
-                id: doc.id,
-                modelo: data.modelo,
-                categoria: data.categoria,
-                nome: data.nome,
-                codigo: data.codigo,
-                imagem: data.imagem
-            });
+            // Só adiciona se não for do Depósito 1700 (opcional, mas evita duplicados se já estiverem marcados)
+            if (!data.deposito || data.deposito !== '1700') {
+                pecas.push({
+                    id: doc.id,
+                    modelo: data.modelo,
+                    categoria: data.categoria,
+                    nome: data.nome,
+                    codigo: data.codigo,
+                    imagem: data.imagem || data.imagem_url
+                });
+            } else {
+                // Se já estiver marcado como 1700, vai para a lista específica
+                pecas1700.push({
+                    id: doc.id,
+                    nome: data.nome || 'Peça Depósito 1700',
+                    codigo: data.codigo,
+                    imagem: data.imagem_url,
+                    deposito: '1700'
+                });
+            }
         });
-        console.log('Peças carregadas do Firebase: ' + pecas.length);
+        
+        // Se houver peças marcadas como 1700 que não foram carregadas acima, garantimos o carregamento
+        // Aqui também poderíamos fazer uma query específica: db.collection('pecas').where('deposito', '==', '1700').get()...
+        
+        console.log('Peças carregadas: ' + pecas.length);
+        console.log('Peças 1700 carregadas: ' + pecas1700.length);
         renderizarHome();
     }).catch(function(error) {
         console.log('Erro ao carregar Firebase: ' + error.message);
@@ -163,8 +182,8 @@ function renderizarPecas(modeloId, categoriaId) {
 
     pecasFiltradas.forEach(function(peca) {
         var idx = pecas.indexOf(peca);
-        html += '<div class="peca-card" onclick="abrirModal(' + idx + ')">';
-        html += '<img class="peca-imagem" src="' + peca.imagem + '" alt="' + peca.nome + '" onerror="this.src=\'placeholder.svg\'">';
+        html += '<div class="peca-card" onclick="abrirModal(' + idx + ', ' + (peca.deposito === '1700') + ')">';
+        html += '<img class="peca-imagem" src="' + (peca.imagem || peca.imagem_url) + '" alt="' + peca.nome + '" onerror="this.src=\'placeholder.svg\'">';
         html += '<div class="peca-info">';
         html += '<div class="peca-nome">' + peca.nome + '</div>';
         html += '<div class="peca-codigo">' + peca.codigo + '</div>';
@@ -195,10 +214,19 @@ function configurarBusca() {
             return;
         }
 
-        var resultados = pecas.filter(function(p) {
-            return p.nome.toUpperCase().indexOf(termo) !== -1 ||
-                   p.codigo.toUpperCase().indexOf(termo) !== -1;
+        // Busca nas peças normais
+        var resultadosNormais = pecas.filter(function(p) {
+            return (p.nome && p.nome.toUpperCase().indexOf(termo) !== -1) ||
+                   (p.codigo && p.codigo.toUpperCase().indexOf(termo) !== -1);
         });
+
+        // Busca nas peças do Depósito 1700
+        var resultados1700 = pecas1700.filter(function(p) {
+            return (p.nome && p.nome.toUpperCase().indexOf(termo) !== -1) ||
+                   (p.codigo && p.codigo.toUpperCase().indexOf(termo) !== -1);
+        });
+
+        var resultados = resultadosNormais.concat(resultados1700);
 
         estadoAtual.tela = 'busca';
         atualizarBreadcrumb();
@@ -226,18 +254,30 @@ function renderizarBusca(resultados, termo) {
     html += '<div class="busca-grid">';
 
     resultados.forEach(function(peca) {
-        var idx = pecas.indexOf(peca);
-        var modelo = MODELOS.find(function(m) { return m.id === peca.modelo; });
-        var categoria = CATEGORIAS.find(function(c) { return c.id === peca.categoria; });
+        var is1700 = peca.deposito === '1700';
+        var idx = is1700 ? pecas1700.indexOf(peca) : pecas.indexOf(peca);
+        
+        var modeloNome = "";
+        var categoriaNome = "";
+        
+        if (!is1700) {
+            var modelo = MODELOS.find(function(m) { return m.id === peca.modelo; });
+            var categoria = CATEGORIAS.find(function(c) { return c.id === peca.categoria; });
+            modeloNome = modelo ? modelo.nome : "";
+            categoriaNome = categoria ? categoria.nome : "";
+        } else {
+            modeloNome = "DEPÓSITO 1700";
+            categoriaNome = "GERAL";
+        }
 
-        html += '<div class="busca-item" onclick="abrirModal(' + idx + ')">';
+        html += '<div class="busca-item" onclick="abrirModal(' + idx + ', ' + is1700 + ')">';
         html += '<div class="busca-item-thumb">';
         html += '<img src="' + peca.imagem + '" alt="' + peca.nome + '" onerror="this.src=\'placeholder.svg\'">';
         html += '</div>';
         html += '<div class="busca-item-info">';
         html += '<div class="busca-item-nome">' + peca.nome + '</div>';
         html += '<div class="busca-item-codigo">' + peca.codigo + '</div>';
-        html += '<div class="busca-item-caminho">' + modelo.nome + ' › ' + categoria.nome + '</div>';
+        html += '<div class="busca-item-caminho">' + modeloNome + (categoriaNome ? ' › ' + categoriaNome : '') + '</div>';
         html += '</div>';
         html += '</div>';
     });
@@ -250,8 +290,8 @@ function renderizarBusca(resultados, termo) {
 // MODAL
 // ============================================
 
-function abrirModal(pecaIndex) {
-    var peca = pecas[pecaIndex];
+function abrirModal(pecaIndex, is1700 = false) {
+    var peca = is1700 ? pecas1700[pecaIndex] : pecas[pecaIndex];
     if (!peca) return;
 
     var modal = document.getElementById('modal');

@@ -41,27 +41,23 @@ function carregarPecasFirebase() {
     // Carregar peças normais
     db.collection('pecas').get().then(function(snapshot) {
         pecas = [];
+        pecas1700 = []; // Limpar antes de carregar
         snapshot.forEach(function(doc) {
             var data = doc.data();
-            // Só adiciona se não for do Depósito 1700 (opcional, mas evita duplicados se já estiverem marcados)
-            if (!data.deposito || data.deposito !== '1700') {
-                pecas.push({
-                    id: doc.id,
-                    modelo: data.modelo,
-                    categoria: data.categoria,
-                    nome: data.nome,
-                    codigo: data.codigo,
-                    imagem: data.imagem || data.imagem_url
-                });
+            var pecaObj = {
+                id: doc.id,
+                modelo: data.modelo,
+                categoria: data.categoria,
+                nome: data.nome || ('PEÇA ' + (data.codigo || doc.id)),
+                codigo: data.codigo || doc.id,
+                imagem: data.imagem || data.imagem_url,
+                deposito: data.deposito
+            };
+
+            if (data.deposito === '1700') {
+                pecas1700.push(pecaObj);
             } else {
-                // Se já estiver marcado como 1700, vai para a lista específica
-                pecas1700.push({
-                    id: doc.id,
-                    nome: data.nome || 'Peça Depósito 1700',
-                    codigo: data.codigo,
-                    imagem: data.imagem_url,
-                    deposito: '1700'
-                });
+                pecas.push(pecaObj);
             }
         });
         

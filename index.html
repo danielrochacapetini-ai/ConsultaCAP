@@ -25,6 +25,16 @@
             </div>
             <div class="search-area">
                 <input type="text" id="searchInput" placeholder="Buscar por código ou nome da peça..." autocomplete="off">
+                <button id="scanButton" class="scan-btn" title="Escanear Código">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+                        <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+                        <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+                        <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                    </svg>
+                </button>
             </div>
             <nav class="nav-links">
                 <a href="index.html" class="nav-btn active">INÍCIO</a>
@@ -60,7 +70,22 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="firebase-config.js"></script>
     <script src="app.js"></script>
+    
+    <!-- Modal do Scanner -->
+    <div id="scannerModal" class="modal-scanner">
+        <div class="scanner-container">
+            <div class="scanner-header">
+                <h3>ESCANEAR CÓDIGO</h3>
+                <button onclick="fecharScanner()" class="close-scanner">&times;</button>
+            </div>
+            <div id="reader"></div>
+            <div class="scanner-footer">
+                <p>Mire o código da peça na área central</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

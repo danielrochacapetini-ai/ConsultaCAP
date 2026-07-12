@@ -332,3 +332,80 @@ function getIconeCategoria(categoriaId) {
     };
     return icones[categoriaId] || icones.FABRICADOS;
 }
+
+// ============================================
+// FUNCIONALIDADE DE SCANNER
+// ============================================
+
+var html5QrCode;
+
+document.getElementById('scanButton').addEventListener('click', function() {
+    abrirScanner();
+});
+
+function abrirScanner() {
+    document.getElementById('scannerModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    html5QrCode = new Html5Qrcode("reader");
+    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+    // Tenta iniciar com a câmera traseira
+    html5QrCode.start(
+        { facingMode: "environment" }, 
+        config, 
+        onScanSuccess
+    ).catch(err => {
+        console.error("Erro ao iniciar câmera:", err);
+        // Se falhar, tenta qualquer câmera disponível
+        html5QrCode.start({ facingMode: "user" }, config, onScanSuccess);
+    });
+}
+
+function onScanSuccess(decodedText, decodedResult) {
+    console.log(`Código detectado: ${decodedText}`);
+    fecharScanner();
+    
+    // O código detectado vai para o campo de busca
+    var input = document.getElementById('searchInput');
+    input.value = decodedText;
+    
+    // Dispara o evento de input para filtrar e abrir a peça
+    var event = new Event('input', { bubbles: true });
+    input.dispatchEvent(event);
+
+    // Busca imediata e abertura do modal se encontrar a peça exata
+    buscarEAbrirPecaExata(decodedText.toUpperCase().trim());
+}
+
+function buscarEAbrirPecaExata(codigo) {
+    // Procura nas peças normais
+    var pNormal = pecas.find(p => p.codigo.toUpperCase() === codigo);
+    if (pNormal) {
+        abrirModal(pecas.indexOf(pNormal), false);
+        return;
+    }
+
+    // Procura nas peças do Depósito 1700
+    var p1700 = pecas1700.find(p => p.codigo.toUpperCase() === codigo);
+    if (p1700) {
+        abrirModal(pecas1700.indexOf(p1700), true);
+        return;
+    }
+}
+
+function fecharScanner() {
+    if (html5QrCode) {
+        html5QrCode.stop().then(() => {
+            document.getElementById('scannerModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }).catch(err => {
+            console.error("Erro ao parar scanner:", err);
+            document.getElementById('scannerModal').classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    } else {
+        document.getElementById('scannerModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}

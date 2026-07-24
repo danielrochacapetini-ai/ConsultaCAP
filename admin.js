@@ -4,8 +4,26 @@ document.addEventListener('DOMContentLoaded', function() {
     configurarUpload();
     configurarFormulario();
     configurarFiltros();
+    configurarDeposito();
     carregarPecas();
 });
+
+function configurarDeposito() {
+    var select = document.getElementById('depositoPeca');
+    var outroGroup = document.getElementById('depositoOutroGroup');
+    var outroInput = document.getElementById('depositoOutro');
+
+    select.addEventListener('change', function() {
+        if (select.value === 'OUTRO') {
+            outroGroup.style.display = 'block';
+            outroInput.required = true;
+        } else {
+            outroGroup.style.display = 'none';
+            outroInput.required = false;
+            outroInput.value = '';
+        }
+    });
+}
 
 // ============================================
 // UPLOAD DE IMAGEM
@@ -86,9 +104,19 @@ function cadastrarPeca() {
     var categoria = document.getElementById('categoria').value;
     var nome = document.getElementById('nomePeca').value.trim().toUpperCase();
     var codigo = document.getElementById('codigoPeca').value.trim().toUpperCase();
+    var deposito = document.getElementById('depositoPeca').value;
 
-    if (!modelo || !categoria || !nome || !codigo || !imagemSelecionada) {
-        mostrarMensagem('Preencha todos os campos e selecione uma imagem.', 'erro');
+    if (deposito === 'OUTRO') {
+        deposito = document.getElementById('depositoOutro').value.trim().toUpperCase();
+    }
+
+    if (!codigo) {
+        mostrarMensagem('O C\u00d3DIGO da pe\u00e7a \u00e9 obrigat\u00f3rio.', 'erro');
+        return;
+    }
+
+    if (!deposito) {
+        mostrarMensagem('O DEP\u00d3SITO \u00e9 obrigat\u00f3rio.', 'erro');
         return;
     }
 
@@ -100,22 +128,30 @@ function cadastrarPeca() {
     btnTexto.textContent = 'ENVIANDO...';
     btnLoading.style.display = 'block';
 
-    var nomeArquivo = modelo + '/' + categoria + '/' + nome + '/' + codigo + '_' + Date.now();
-    var ref = storage.ref('pecas/' + nomeArquivo);
-
-    ref.put(imagemSelecionada).then(function(snapshot) {
-        return snapshot.ref.getDownloadURL();
-    }).then(function(url) {
-        return db.collection('pecas').add({
-            modelo: modelo,
-            categoria: categoria,
-            nome: nome,
-            codigo: codigo,
-            imagem: url,
-            criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+    var uploadPromise;
+    if (imagemSelecionada) {
+        var nomeArquivo = (modelo || 'GERAL') + '/' + (categoria || 'GERAL') + '/' + (nome || codigo) + '/' + codigo + '_' + Date.now();
+        var ref = storage.ref('pecas/' + nomeArquivo);
+        uploadPromise = ref.put(imagemSelecionada).then(function(snapshot) {
+            return snapshot.ref.getDownloadURL();
         });
+    } else {
+        uploadPromise = Promise.resolve('');
+    }
+
+    uploadPromise.then(function(url) {
+        var dados = {
+            codigo: codigo,
+            deposito: deposito,
+            criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        if (modelo) dados.modelo = modelo;
+        if (categoria) dados.categoria = categoria;
+        if (nome) dados.nome = nome;
+        if (url) dados.imagem = url;
+        return db.collection('pecas').add(dados);
     }).then(function() {
-        mostrarMensagem('Peça "' + nome + '" cadastrada com sucesso!', 'sucesso');
+        mostrarMensagem('Peça "' + (nome || codigo) + '" cadastrada com sucesso!', 'sucesso');
         limparFormulario();
         carregarPecas();
     }).catch(function(error) {
@@ -132,6 +168,8 @@ function limparFormulario() {
     document.getElementById('formPeca').reset();
     document.getElementById('previewImagem').style.display = 'none';
     document.getElementById('uploadPlaceholder').style.display = 'flex';
+    document.getElementById('depositoOutroGroup').style.display = 'none';
+    document.getElementById('depositoOutro').required = false;
     imagemSelecionada = null;
 }
 
@@ -196,15 +234,20 @@ function carregarPecas() {
 }
 
 function renderizarItemLista(peca, id) {
-    var modeloNome = peca.modelo.replace(/_/g, ' ');
-    var categoriaNome = peca.categoria;
+    var modeloNome = (peca.modelo || '').replace(/_/g, ' ');
+    var categoriaNome = peca.categoria || '';
+    var caminho = [modeloNome, categoriaNome].filter(Boolean).join(' › ');
+    if (peca.deposito) {
+        caminho = 'DEP ' + peca.deposito + (caminho ? ' › ' + caminho : '');
+    }
+    var imgSrc = peca.imagem || peca.imagem_url || 'placeholder.svg';
 
     return '<div class="lista-item">' +
-        '<div class="lista-item-thumb"><img src="' + peca.imagem + '" alt="' + peca.nome + '"></div>' +
+        '<div class="lista-item-thumb"><img src="' + imgSrc + '" alt="' + (peca.nome || peca.codigo) + '" onerror="this.src=\'placeholder.svg\'"></div>' +
         '<div class="lista-item-info">' +
-        '<div class="lista-item-nome">' + peca.nome + '</div>' +
+        '<div class="lista-item-nome">' + (peca.nome || peca.codigo) + '</div>' +
         '<div class="lista-item-codigo">' + peca.codigo + '</div>' +
-        '<div class="lista-item-caminho">' + modeloNome + ' › ' + categoriaNome + '</div>' +
+        '<div class="lista-item-caminho">' + caminho + '</div>' +
         '</div>' +
         '<button class="lista-item-delete" onclick="excluirPeca(\'' + id + '\')" title="Excluir peça">' +
         '<svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>' +

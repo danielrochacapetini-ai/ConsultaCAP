@@ -33,8 +33,8 @@
                 <form id="formPeca">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="modelo">MODELO DO VEÍCULO</label>
-                            <select id="modelo" required>
+                            <label for="modelo">MODELO DO VEÍCULO <small>(opcional)</small></label>
+                            <select id="modelo">
                                 <option value="">Selecione o modelo...</option>
                                 <option value="VOLARE_MV9L">VOLARE MV9L</option>
                                 <option value="VOLARE_V9L">VOLARE V9L</option>
@@ -50,8 +50,8 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="categoria">CATEGORIA</label>
-                            <select id="categoria" required>
+                            <label for="categoria">CATEGORIA <small>(opcional)</small></label>
+                            <select id="categoria">
                                 <option value="">Selecione a categoria...</option>
                                 <option value="FABRICADOS">FABRICADOS</option>
                                 <option value="PLASTICOS">PLÁSTICOS</option>
@@ -63,18 +63,33 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="nomePeca">NOME DA PEÇA</label>
-                            <input type="text" id="nomePeca" placeholder="Ex: CADEIRANTE" required>
+                            <label for="nomePeca">NOME DA PEÇA <small>(opcional)</small></label>
+                            <input type="text" id="nomePeca" placeholder="Ex: CADEIRANTE">
                         </div>
                         <div class="form-group">
-                            <label for="codigoPeca">CÓDIGO DA PEÇA</label>
+                            <label for="codigoPeca">CÓDIGO DA PEÇA *</label>
                             <input type="text" id="codigoPeca" placeholder="Ex: MP-ADV-001" required>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="depositoPeca">DEPÓSITO *</label>
+                            <select id="depositoPeca" required>
+                                <option value="">Selecione o depósito...</option>
+                                <option value="1700">1700</option>
+                                <option value="4008/4009">4008/4009</option>
+                                <option value="OUTRO">OUTRO</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="depositoOutroGroup" style="display:none;">
+                            <label for="depositoOutro">INFORME O DEPÓSITO *</label>
+                            <input type="text" id="depositoOutro" placeholder="Ex: 4010">
+                        </div>
+                    </div>
                     <div class="form-group">
-                        <label for="imagemPeca">IMAGEM DA PEÇA</label>
+                        <label for="imagemPeca">IMAGEM DA PEÇA <small>(opcional)</small></label>
                         <div class="upload-area" id="uploadArea">
-                            <input type="file" id="imagemPeca" accept="image/*" required>
+                            <input type="file" id="imagemPeca" accept="image/*">
                             <div class="upload-placeholder" id="uploadPlaceholder">
                                 <svg viewBox="0 0 24 24" fill="#999"><path d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h3V2h2v3h3v2h-3zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8h-3zM5 19l3-4 2 3 3-4 4 5H5z"/></svg>
                                 <p>Clique ou arraste a imagem aqui</p>
